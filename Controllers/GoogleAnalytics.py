@@ -7,7 +7,8 @@ import httplib2
 from oauth2client import client
 from oauth2client import file
 from oauth2client import tools
-from pymongo import MongoClient
+import pymssql
+import LoadService
 
 SCOPES = ['https://www.googleapis.com/auth/analytics.readonly']
 DISCOVERY_URI = ('https://analyticsreporting.googleapis.com/$discovery/rest')
@@ -118,7 +119,8 @@ def add_to_dict(response):
 				#print 'Date range (' + str(i) + ')'
 				for metricHeader, value in zip(metricHeaders, values.get('values')):
 					#db.pageviews.insert_one({"url": url, "pageviews" : int(value), "isoweek": isoweek})
-					print "URL: " + url + ' Views: ' + value + " ISOWeek: " + isoweek
+					#print "URL: " + url + ' Views: ' + value + " ISOWeek: " + isoweek
+                    LoadService.load_data(url = url, isoweek = isoweek, views = views, year = '2016')
 
 def main():
 
