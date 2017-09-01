@@ -16,14 +16,12 @@ class QueryController:
         pass
     
     def main(self):
-        self.current = self.getData("04");
-        self.previous = self.getData("03");
+        self.current = self.getData("04")
         self._next = self.getData("05")
+        curr_list = []
         for i in self.current:
-            if (i['url']
-        #for i in self.current:
-            #print i['url']
-
+            curr_list.append(i['url'])
+        print curr_list
 if __name__ == '__main__':
     cont = QueryController()
     cont.main()
