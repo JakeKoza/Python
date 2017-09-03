@@ -7,9 +7,9 @@ import httplib2
 from oauth2client import client
 from oauth2client import file
 from oauth2client import tools
-import pymssql
+#import pymssql
 import re
-from pymongo import MongoClient;
+from pymongo import MongoClient
 #import LoadService
 
 SCOPES = ['https://www.googleapis.com/auth/analytics.readonly']
