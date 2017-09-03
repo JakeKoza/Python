@@ -23,8 +23,8 @@ class QueryController:
         #self.StripData(testing)
         #testing = testing.split("\\")
         #print testing[1:2]
-        self.current = self.GetData("04")
-        self._next = self.GetData("05")
+        self.current = self.GetData("05")
+        self._next = self.GetData("06")
         curr_list = []
         next_list = []
         only_in_next = []
@@ -39,10 +39,14 @@ class QueryController:
             next_list.append(i['url'])
         only_in_next = list(set(next_list) - set(curr_list))
         in_both = list(set(curr_list) & set(next_list))
-        #for i in only_in_next:
-        #   print i
-        for i in in_both:
-            print i
+        for i in only_in_next:
+           print i
+        #for i in in_both:
+        #    print i
+        print str(len(in_both)) + " InBoth"
+        print str(len(curr_list)) + " Current"
+        print str(len(next_list)) + " Next"
+        print str(len(only_in_next)) + " InNext"
         
 
 if __name__ == '__main__':
