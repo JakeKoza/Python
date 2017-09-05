@@ -16,6 +16,14 @@ class QueryController:
         dataToStrip = str(dataToStrip)
         strippedData = dataToStrip.split("/")
         print strippedData[1:2]
+
+    def ItemsInBoth(self, currWeek, nextWeek):
+        in_both = list(set(curr_list) & set(next_list))
+        return in_both[0:4]
+
+    def ItemsInNextWeek(self, currWeek, nextWeek):
+        only_in_next = list(set(next_list) - set(curr_list))
+        return only_in_next[0:3]
     
     def main(self):
         #testing = str("\\admissions\\default.aspx\\")
@@ -37,8 +45,10 @@ class QueryController:
             curr_list.append(i['url'])
         for i in self._next:
             next_list.append(i['url'])
-        only_in_next = list(set(next_list) - set(curr_list))
-        in_both = list(set(curr_list) & set(next_list))
+        #only_in_next = list(set(next_list) - set(curr_list))
+        only_in_next = ItemsInNextWeek(curr_list, next_list)
+        #in_both = list(set(curr_list) & set(next_list))
+        in_both = ItemsInBoth(curr_list, next_list)
         for i in only_in_next:
            print i
         #for i in in_both:
