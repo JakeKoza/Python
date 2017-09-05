@@ -15,22 +15,19 @@ class QueryController:
     def StripData(self, dataToStrip):
         dataToStrip = str(dataToStrip)
         strippedData = dataToStrip.split("/")
-        print strippedData[1:2]
+        return "".join(str(e) for e in strippedData[1:2])
+        #return str(strippedData[1:2])
 
     def ItemsInBoth(self, currWeek, nextWeek):
-        in_both = list(set(curr_list) & set(next_list))
+        in_both = list(set(currWeek) & set(nextWeek))
         return in_both[0:4]
 
     def ItemsInNextWeek(self, currWeek, nextWeek):
-        only_in_next = list(set(next_list) - set(curr_list))
+        only_in_next = list(set(nextWeek) - set(currWeek))
         return only_in_next[0:3]
     
     def main(self):
-        #testing = str("\\admissions\\default.aspx\\")
-        #print testing
-        #self.StripData(testing)
-        #testing = testing.split("\\")
-        #print testing[1:2]
+        
         self.current = self.GetData("05")
         self._next = self.GetData("06")
         curr_list = []
@@ -38,25 +35,29 @@ class QueryController:
         only_in_next = []
         in_both = []
         for i in self.current:
-            #print i['url']
-            #print type(str(i['url']))
-            #data = str(i['url'])
-            #self.StripData(data)
             curr_list.append(i['url'])
+
         for i in self._next:
             next_list.append(i['url'])
-        #only_in_next = list(set(next_list) - set(curr_list))
-        only_in_next = ItemsInNextWeek(curr_list, next_list)
-        #in_both = list(set(curr_list) & set(next_list))
-        in_both = ItemsInBoth(curr_list, next_list)
+       
+        print "Items in Next"
+        only_in_next_json = []
+        only_in_next = self.ItemsInNextWeek(curr_list, next_list)
         for i in only_in_next:
-           print i
-        #for i in in_both:
-        #    print i
-        print str(len(in_both)) + " InBoth"
-        print str(len(curr_list)) + " Current"
-        print str(len(next_list)) + " Next"
-        print str(len(only_in_next)) + " InNext"
+            i = self.StripData(i)
+            print i
+            only_in_next_json.append({"next": i})
+        print only_in_next_json
+        
+        print "Items in Both"
+        in_both_json = []
+        in_both = self.ItemsInBoth(curr_list, next_list)
+        for i in in_both:
+            i = self.StripData(i)
+            in_both_json.append({"both": i})
+            print i
+        print in_both_json
+        
         
 
 if __name__ == '__main__':
