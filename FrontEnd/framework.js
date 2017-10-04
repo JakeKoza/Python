@@ -9,7 +9,7 @@ function getWeeks(){
     var today = new Date();
     var week = today.getWeek();
 
-    var span = [week-1, week, week+1]
+    var span = [week, week+1]
     return span
 }
 
@@ -25,4 +25,50 @@ function updateLinks(array){
             $('a[href^="'+url+'"]').css({"color": "white", "background-color": "#69acff","font-weight": "lighter"});
         }else{}
     }, this);
+}
+
+
+function getWeekData(week) {
+    var weeks = getWeeks();
+    if (week == "this"){
+        var weeknum = weeks[0];
+    }else{
+        var weeknum =weeks[1];
+    }
+    apiurl = "https://localhost:8443/API/GetWeek/" + String(weeknum) 
+    $.ajax({url: apiurl, 
+            success: function(data){
+                //TO-DO: Figure how to return data or call another function
+                //console.log(data)
+                returndata(data)
+            }
+        });
+}
+
+function compareData(thisweek, nextweek, direction){
+     if(direction === "findNext"){
+        var diff = $(nextweek).not(thisweek).get();
+        return diff;
+     }
+     else if(direction === "both"){
+
+     }
+     else if(direction === "this"){
+        var diff = $(thisweek).not(nextweek).get();
+        return diff;
+     }
+     else {}
+}
+
+(function(){
+    var thisWeek = getWeekData("this").slice(0,30);
+    var nextWeek = getWeekData("next").slice(0,30);
+
+    console.log(compareData(thisweek, nextweek, "findNext"))
+
+}())
+
+function returndata(data){
+    var mydata = data.slice(0,20)
+    console.log(mydata)
 }

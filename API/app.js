@@ -7,8 +7,8 @@ var fs = require('fs');
 var https = require('https')
 
 var options = {
-  key: fs.readFileSync('../server.key'),
-  cert: fs.readFileSync('../server.crt')
+  key: fs.readFileSync('../../server.key'),
+  cert: fs.readFileSync('../../server.crt')
 };
 
 var app = express();

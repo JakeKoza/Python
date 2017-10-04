@@ -27,7 +27,8 @@ var router = function () {
     .get(function(req, res){
         mongodb.connect(url, function(err, db) {
             if (err) throw err;
-            db.collection("01").find({}).toArray(function(err, result) {
+            var mysort = {"pageviews": 1}
+            db.collection("01").find({}).sort(mysort).toArray(function(err, result) {
               if (err) throw err;
               //res.writeHead(200, {"Access-Control-Allow-Origin": "localhost"});
               res.jsonp(result);
