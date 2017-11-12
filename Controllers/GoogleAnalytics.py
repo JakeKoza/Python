@@ -144,7 +144,7 @@ def add_to_dict(response):
 				for metricHeader, value in zip(metricHeaders, values.get('values')):
 				        #db = client["Week"+isoweek+"Year2016"]
 					db[isoweek].insert_one({"url": url, "pageviews" : int(value), "isoweek": isoweek})
-					print "URL: " + url + ' Views: ' + value + " ISOWeek: " + isoweek
+					#print "URL: " + url + ' Views: ' + value + " ISOWeek: " + isoweek
                     			#LoadService.load_data(url = url, isoweek = isoweek, views = views, year = '2016')
 
 def main():

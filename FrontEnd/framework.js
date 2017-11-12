@@ -30,17 +30,20 @@ function updateLinks(array){
 
 function getWeekData(week) {
     var weeks = getWeeks();
+    var weeknum = 0;
     if (week == "this"){
-        var weeknum = weeks[0];
+        weeknum = weeks[0];
     }else{
-        var weeknum =weeks[1];
+        weeknum =weeks[1];
     }
     apiurl = "https://localhost:8443/API/GetWeek/" + String(weeknum) 
-    $.ajax({url: apiurl, 
+    //$.ajax({url: apiurl, 
+    $.getJSON({url: apiurl,
             success: function(data){
                 //TO-DO: Figure how to return data or call another function
                 //console.log(data)
-                returndata(data)
+                //var json = JSON.stringify(data)
+                console.log(json)
             }
         });
 }
@@ -69,6 +72,5 @@ function compareData(thisweek, nextweek, direction){
 }())
 
 function returndata(data){
-    var mydata = data.slice(0,20)
-    console.log(mydata)
+    console.log(data)
 }
