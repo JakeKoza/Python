@@ -14,8 +14,8 @@ function getWeeks(){
 }
 
 
-function updateLinks(array){
-    array.forEach(function(element) {
+function updateLinks(element){
+    //array.forEach(function(element) {
         var url = element["url"];
         if(element["selector"] == "prev"){
             $('a[href^="'+url+'"]').css({"color": "white", "background-color": "#69acff","font-weight": "lighter"});
@@ -24,9 +24,13 @@ function updateLinks(array){
         }else if(element["selector"] == "both"){
             $('a[href^="'+url+'"]').css({"color": "white", "background-color": "#69acff","font-weight": "lighter"});
         }else{}
-    }, this);
+    //}, this);
 }
 
+function stripData(url){
+    var strippedURL = url.split(/\//);
+    return strippedURL[1];
+}
 
 function getWeekData(week) {
     var weeks = getWeeks();
@@ -37,13 +41,25 @@ function getWeekData(week) {
         weeknum =weeks[1];
     }
     apiurl = "https://localhost:8443/API/GetWeek/" + String(weeknum) 
-    //$.ajax({url: apiurl, 
-    $.getJSON({url: apiurl,
+    $.ajax({url: apiurl, 
+    //$.getJSON({url: apiurl,
             success: function(data){
                 //TO-DO: Figure how to return data or call another function
                 //console.log(data)
                 //var json = JSON.stringify(data)
-                console.log(json)
+                var topFive = data.slice(0,5)
+                //updateLinks(topFive)
+                topFive.forEach(element => {
+                    var selector = ""
+                    if(week ==="next"){
+                        selector ="next"
+                    }else if(week ==="this"){
+                        selector = "prev"
+                    }
+                    var item = {url: stripData(element["url"]), selector: "next"}
+                    updateLinks(item)
+                    console.log(item)
+                });
             }
         });
 }
@@ -64,8 +80,8 @@ function compareData(thisweek, nextweek, direction){
 }
 
 (function(){
-    var thisWeek = getWeekData("this").slice(0,30);
-    var nextWeek = getWeekData("next").slice(0,30);
+    var thisWeek = getWeekData("this").slice(0,5);
+    var nextWeek = getWeekData("next").slice(0,5);
 
     console.log(compareData(thisweek, nextweek, "findNext"))
 
