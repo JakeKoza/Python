@@ -47,7 +47,7 @@ function getWeekData(week) {
                 //TO-DO: Figure how to return data or call another function
                 //console.log(data)
                 //var json = JSON.stringify(data)
-                var topFive = data.slice(0,5)
+                var topFive = data.slice(0,10)
                 //updateLinks(topFive)
                 topFive.forEach(element => {
                     var selector = ""
@@ -80,10 +80,10 @@ function compareData(thisweek, nextweek, direction){
 }
 
 (function(){
-    var thisWeek = getWeekData("this").slice(0,5);
-    var nextWeek = getWeekData("next").slice(0,5);
+    var thisWeek = getWeekData("this");
+    var nextWeek = getWeekData("next");
 
-    console.log(compareData(thisweek, nextweek, "findNext"))
+    //console.log(compareData(thisweek, nextweek, "findNext"))
 
 }())
 
