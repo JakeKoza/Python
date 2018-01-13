@@ -1,3 +1,186 @@
+document.getElementById("box").disabled = true;
+document.getElementById("go").disabled = true;
+if(document.getElementById("RssAlertsDesktopOnly")){
+    document.getElementById("RssAlertsDesktopOnly").hidden = true;
+}
+
+
+function grabScripts (argument) {
+    var host = "http://active-analytics.appspot.com";
+    if(window.location.host.indexOf("localhost") >= 0){
+        host = "http://localhost:8082";
+    }
+    window._AAHost = host;
+    $("head").append("<link href='" + host + "/client/lib/activeanalytics.css' rel='stylesheet' />");
+    $.getScript( host + "/client/lib/activeanalytics.js", function( data, textStatus, jqxhr ) {setTimeout(init, 1000);});
+}
+function updateData (date, disableCache, frameworkEnabled) {
+    console.log("lets go");
+
+    //Disable external links
+    $("a[href^='http']").click(function(){
+        alert("This link will take you to an external site, it has been disabled for this test.");
+        return false;
+    });
+    //Disable search feature
+    $(document).submit(function() {
+        alert("The search feature has been disabled for this test. Please navigate using the search suggestions or links on the page.");
+        return false;
+    });
+
+    if (!frameworkEnabled) {
+        return;
+    }
+
+    //Default settings
+    var apiDate = new Date(Date.parse(date + " " + new Date().toLocaleTimeString()));
+    disableCache = disableCache === true ? true : false;
+    var settings = {
+        titleReplaceRegex: /(University of North Florida|UNF - |University of North Florida - |UNF Mobile - - |- |UNF)/g,
+        //serviceURL: _AAHost,
+        //date: apiDate,
+        //disableCache: disableCache,
+        //site: "ga:991324"
+    };
+	/*
+    //Populate search suggestions
+    $("#box").ActiveAnalytics("search", settings);
+    $("a").each(function(i){
+        $(this).attr("data-page-id", "page-" + i);
+    });
+
+    //Create hover suggestions
+    $("#simple a, .audience a").ActiveAnalytics("hover", settings);
+
+    //Rank links in homepage nav well
+    $("#UNFbignav li a")
+        //Rank with color range
+        .ActiveAnalytics("rankstyle", $.extend({
+            rank: {
+                rangeStart: "#EEEFF0",
+                rangeEnd: "#86C3FF",
+                rankBy: "hits",
+                style: "background-color",
+                distribution:"even"
+            }
+        }, settings))
+        //Rank with font size
+        .ActiveAnalytics("rankstyle", $.extend({
+            rank: {
+                rangeStart: 11,
+                rangeEnd: 13,
+                rankBy: "hits",
+                style: "font-size",
+                unit: "px"
+            }
+        }, settings)).css({"color":"black"});
+    $("#UNFbignav ul").css({"height": "auto"});
+
+    //Rank links on audience page with color range
+    $("#leftCol table li a, #TwoCol table li a")
+        .ActiveAnalytics("rankstyle", $.extend({
+            rank: {
+                rangeStart: "#FFFFFF",
+                rangeEnd: "#FFFF24",
+                rankBy: "hits",
+                style: "background-color",
+                distribution:"even"
+            }
+        }, settings))
+        .ActiveAnalytics("rankstyle", $.extend({
+            rank: {
+                rangeStart: 12,
+                rangeEnd: 15,
+                rankBy: "hits",
+                style: "font-size",
+                unit: "px"
+            }
+        }, settings))
+        .ActiveAnalytics("rankstyle", $.extend({
+            rank: {
+                rangeStart: 15,
+                rangeEnd: 30,
+                rankBy: "hits",
+                style: "line-height",
+                unit: "px"
+            }
+        }, settings));
+
+    $(".UNFMenu li a")
+        //Rank with color range
+        .ActiveAnalytics("rankstyle", $.extend({
+            rank: {
+                rangeStart: "#D1E8FF",
+                rangeEnd: "#86C3FF",
+                rankBy: "hits",
+                style: "background-color"
+            }
+        }, settings))
+        //Rank with font size
+        .ActiveAnalytics("rankstyle", $.extend({
+            rank: {
+                rangeStart: 11,
+                rangeEnd: 13,
+                rankBy: "hits",
+                style: "font-size",
+                unit: "px",
+                distribution: "even"
+            }
+        }, settings));
+
+    //Create popular links list
+    $("#news, #aaPopular").attr("id", "aaPopular").html("<h2><span class='title'>Popular Links</span></h2>");
+    $("#aaPopular").ActiveAnalytics("popular-global",$.extend({wrap: $("<h3>")}, settings));
+
+    //Library menu
+    $("#mainMenu .collapse a")
+        //Rank with color range
+        .ActiveAnalytics("rankstyle", $.extend({
+            rank: {
+                rangeStart: "#dedede",
+                rangeEnd: "#86C3FF",
+                rankBy: "hits",
+                style: "background-color"
+            }
+        }, settings))
+        //Rank with font size
+        .ActiveAnalytics("rankstyle", $.extend({
+            rank: {
+                rangeStart: 12,
+                rangeEnd: 14,
+                rankBy: "hits",
+                style: "font-size",
+                unit: "px"
+            }
+        }, settings)).css({"color":"black"});
+
+    var $libCont = $("#ctl00_MainContentRegion_DZMain_uxColumnDisplay_ctl00_uxControlColumn_ctl00_uxWidgetHost_uxUpdatePanel");
+    $libCont.html("<h3>Popular:</h3>");
+    settings.callback = function() {
+        $libCont.find("a").each(function(){
+            $(this).text($(this).text().replace("Thomas G. Carpenter Library", ""));
+        });
+    };
+    $libCont.ActiveAnalytics("popular",$.extend({wrap: $("<li style='font-weight: bold; padding-top:8px;'>")}, settings));
+	*/
+}
+function init(){
+    if(window.location.hash == "#admin"){
+        //Control panel
+        createModal('<h2><span class="title">Active Analytics</span></h2>Simulate Date:<div style="clear:both"><input type="text" placeholder="Date" id="txtDate"><input type="button" value="Set" id="btnDate"><img class="aaLoading" style="visibility: hidden;margin-top: -15px;" src="/image/loading.gif"></div>');
+        $("#txtDate").val(new Date().toLocaleDateString());
+        updateData($("#txtDate").val(), false);
+
+        //Re-initialize when date button is clicked
+        $("#btnDate").click(function () {
+            updateData($("#txtDate").val(), true);
+        });
+    }
+    else{
+        var service = new TaskService();
+    }
+
+}
 function createModal (content, full) {
     var $container = $("#UNFinfo");
     if($container.length === 0){
@@ -19,42 +202,42 @@ function TaskService() {
     this.tasks = [
         {
             id: 1,
-            title: "Task #1 Library Hours",
+            title: "Task #1 Colleges And Programs",
             complete: function(){
-                return window.location.pathname.replace(/\//g, "").toLowerCase() === "libraryhours" || document.title === "UNF - Thomas G. Carpenter Library - Hours";
+                return window.location.pathname.replace(/\//g, "").toLowerCase() === "infoacademicsindex.html" || document.title === "UNF - Colleges and Programs";
             },
             start: "/",
-            desc: "A new student Alex, recently transferred from UCF and he is in your class. He wants to know hours when UNF Library will be open for this semester. Help Alex by navigating to UNF library page that displays its operation hours. Please navigate to the Library “Hours of Operation” page (the page with a full calendar on it)",
+            desc: "A prospective student, Bob, is interested in attending UNF beginning in the summer semester. He is undecided in what he wants to study, so help Bob see a list of Colleges and Programs available at UNF. Please navigate to the \"Colleges and Programs\" page.",
             date: null
         },
         {
             id: 2,
-            title: "Task #2 Printing and Copying",
+            title: "Task #2 Course Catalog",
             complete: function(){
-                return window.location.pathname.replace(/\//g, "").toLowerCase() === "libraryservicesstudentsprinting.aspx" || document.title === "UNF - Thomas G. Carpenter Library - printing";
+                return window.location.pathname.replace(/\//g, "").toLowerCase() === "catalogindex.html" || document.title === "UNF - Catalog Homepage";
             },
             start: "/",
-            desc: "Alex wants has some questions on printing and copying at library. Help Alex by navigating to UNF library page that displays printing and copying information. Please navigate to the UNF library “Printing and Copying Information” page",
+            desc: "Bob, after deciding on two possible schools he is interested in, would like to know more about the classes offered to students. Please navigate to the \"Course Catalog for Undergraduate Students\" page",
             date: null
         },
         {
             id: 3,
-            title: "Task #3 HR Benefits",
+            title: "Task #3 Graduate School Programs",
             complete: function(){
-                return window.location.pathname.replace(/\//g, "").toLowerCase() === "hrbenefitsbenefits.aspx" || document.title === "UNF - Human Resources - Benefits";
+                return window.location.pathname.replace(/\//g, "").toLowerCase() === "gradudateschoolacademicsgradudate_programs.html" || document.title === "UNF - The Graduate School - Graduate Programs";
             },
             start: "/",
-            desc: "Alex is interested in working for UNF and has some questions on benefits offered to UNF employees. Help Alex by navigating to human resource page that displays benefits information. Please navigate to the Human Resources “Benefits” page",
+            desc: "Bob has also considered pursuing a Masters degree following his undergraduate degree. He would like to know more about the programs offered to see if any exist in the two schools he is considering. Please navigate to the \"Graduate Programs at UNF\" page.",
             date: null
         },
         {
             id: 4,
-            title: "Task #4 HR Employment",
+            title: "Task #4 Tuition",
             complete: function(){
-                return window.location.pathname.replace(/\//g, "").toLowerCase() === "hremploymentemployment.aspx" || document.title === "UNF - Human Resources - Employment";
+                return window.location.pathname.replace(/\//g, "").toLowerCase() === "tuition" || document.title === "UNF - Controller - Tuition and Fees";
             },
             start: "/",
-            desc: "Alex is interested in learning about employment opportunities at UNF. Help Alex by navigating to human resource page that displays employment information. Please navigate to the Human Resources “Employment” page. You begin to wonder if Alex has ever seen a computer before",
+            desc: "Bob will likely be paying his way through school and would like to obtain information on tuition and fees for UNF students. Help Bob by navigating to controller page that displays tuition and fees details. Please navigate to the \"Tuition\" page with the breakdown of tuition and fees for students.",
             date: null
         },
         {
@@ -64,29 +247,40 @@ function TaskService() {
                 return window.location.pathname.replace(/\//g, "").toLowerCase() === "admissionsapplyadmission_deadlines_form.aspx" || document.title === "UNF - Admissions - Admission Deadlines Form";
             },
             start: "/",
-            desc: "Alex mentions that his cousin Zack is also considering applying for UNF. Alex would like to know information regarding application deadlines. Help Alex by navigating to UNF admissions page that displays deadlines information. Hopefully he won't need help applying too. Please navigate to the UNF Admissions “Deadlines” page",
+            desc: "Bob wants to begin school in the Summer and would like to know information regarding application deadlines. Help Bob by navigating to UNF admissions page that displays deadlines information. Hopefully he won't need help applying too. Please navigate to the UNF Admissions \"Deadlines\" page",
             date: null
         },
         {
             id: 6,
-            title: "Task #6 Graduate Programs of Study",
+            title: "Task #6 Apply",
             complete: function(){
-                return window.location.pathname.replace(/\//g, "").toLowerCase() === "graduateschoolacademicsgraduate_programs.aspx" || document.title === "UNF - The Graduate School - Graduate Programs";
+                return window.location.pathname.replace(/\//g, "").toLowerCase() === "admissionspplynowindex.html" || document.title === "UNF - Admissions - Apply Now";
             },
             start: "/",
-            desc: "Alex mentions that Zack would be interested in graduate programs. Alex wants to obtain information on available graduate programs at UNF. Help Alex by navigating to graduate school page that displays available graduate programs at UNF. Please navigate to the Graduate School’s “Graduate Programs” page",
+            desc: "Bob believes he has decided on a major to persue and wants to know more about the Application process and possibly apply today. Help Bob by navitagation to the UNF admissions page that displays the steps for applying. Please nvaigate to the \"Apply Now\" page",
             date: null
         },
         {
             id: 7,
-            title: "Task #7 Tuition",
+            title: "Task #7 HR Employment",
             complete: function(){
-                return window.location.pathname.replace(/\//g, "").toLowerCase() === "tuition" || document.title === "UNF - Controller - Tuition and Fees";
+                return window.location.pathname.replace(/\//g, "").toLowerCase() === "hremploymentstudent_employment_resources.html" || document.title === "UNF - Human Resources - Student Employment Resources";
             },
             start: "/",
-            desc: "Alex would like to obtain information on tuition and fees for UNF students. Really Alex?... Help Alex by navigating to controller page that displays tuition and fees details. Please navigate to the “Tuition” page with the breakdown of tuition and fees for students.",
+            desc: "Bob, an enterprising young man, wants to work his way through school. He is interested in learning about student employment opportunites. Pleas help Bob find the Human Resources page that lists the types of student employement at UNF. Please navigate to the \"UNF Student Employment\" page",
+            date: null
+        },
+        {
+            id: 8,
+            title: "Task #8 HR Benefits",
+            complete: function(){
+                return window.location.pathname.replace(/\//g, "").toLowerCase() === "hrbenefitsbenefits.html" || document.title === "UNF - Human Resources - Benefits";
+            },
+            start: "/",
+            desc: "Bob has some questions on benefits offered to UNF employees. Help Bob by navigating to human resource page that displays benefits information. Please navigate to the Human Resources \"Benefits\" page",
             date: null
         }
+        
     ];
     this.questions = [
         {
@@ -208,12 +402,14 @@ function TaskService() {
         return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
     };
     this.submitData = function(){
+		console.log(JSON.stringify(this._data))
          $.ajax({
-            url: window._AAHost + '/submit',
+            //url: "http://73.224.158.224:500/Submit/SubmitData",
+            url: "http://api.jacobkoza.com:8080/Submit/SubmitData",
             method: 'POST',
             data: {
-                stat: JSON.stringify(this._data),
-                user: window.sessionStorage['user']
+                stat: this._data,
+                user: JSON.parse(window.sessionStorage['user'])
             }
          });
     };
@@ -370,18 +566,22 @@ function TaskService() {
                 }
                 aaId = $(e.toElement).attr("data-aa-id");
                 href = $(e.toElement).attr("href");
+				console.log("aaid" + aaId + " href " + href);
                 if(!href) {
                     return;
                 }
                 var clickData = { task: currentTask.title, taskId: currentTask.id, url: window.location.pathname + window.location.search, href: href, aaid: "none", timestamp: new Date().toISOString() };
+				console.log("click data " + clickData)
                 if(aaId) {
+					console.log("got to if(aaid)")
                     clickData.aaid = aaId;
                 }
+				console.log("Trying to push " + clickData)
                 d.clicks.push(clickData);
                 svc.saveData();
             }
             catch(e) {
-                console.log(e);
+                console.log("error tracking click" + e);
             }
         });
     };
@@ -408,14 +608,18 @@ function TaskService() {
             }
             else {
                 window.sessionStorage['user'] = JSON.stringify(usr);
+				//console.log(JSON.parse(window.sessionStorage["user"])['nnumber'])
                 $.ajax({
-                    url: window._AAHost + '/check',
+                    //TODO: Change the URL to Post to My Endpoint
+                    //url: "http://73.224.158.224:500/Submit/CheckUser",
+                    url: "http://api.jacobkoza.com:8080/Submit/CheckUser",
                     method: 'POST',
                     data: {
-                        user: window.sessionStorage['user']
+                        userID: JSON.parse(window.sessionStorage["user"])['nnumber']
                     },
                     success: function (data) {
-                        if (data == 'true') {
+						console.log(data)
+                        if (data == 'no user') {
                             self.resume();
                         }
                         else {
@@ -463,4 +667,5 @@ function TaskService() {
         this.resume();
     }
 }
+
 TaskService()

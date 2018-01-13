@@ -48,8 +48,8 @@ var router = function () {
     .post(function(req, res){
         mongodb.connect(frameworkurl, function(err, db) {
             if (err) throw err;
-            var guid = req.body.stat.id
-            var user = {"submissionID": guid, "user": JSON.parse(req.body.user)}
+            var guid = req.body.stat.id;
+            var user = req.body.user;
             console.log(req.body.stat)
             db.collection("submissions").insertOne(req.body.stat, function(err, result) {
               if (err) throw err;
