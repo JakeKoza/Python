@@ -1,6 +1,7 @@
 var express = require("express");
 var mongodb = require('mongodb').MongoClient;
 var ObjectId = require('mongodb').ObjectID;
+var ttest = require('ttest');
 var adminRouter = express.Router();
 var frameworkurl = "mongodb://localhost:27017/submissions";
 var router = function () {
@@ -31,16 +32,17 @@ var router = function () {
             db.collection("submissions").find({}).toArray(function(err, result) {
               if (err) throw err;
               
-                var question1clicks = 0
-                var question2clicks = 0
-                var question3clicks = 0
-                var question4clicks = 0
-                var question5clicks = 0
-                var question6clicks = 0
-                var question7clicks = 0 
-                var question8clicks = 0
-                var clickdata = {}
+              var clickdata = {}
                 result.forEach(function(data,i){
+                    var question1clicks = 0
+                    var question2clicks = 0
+                    var question3clicks = 0
+                    var question4clicks = 0
+                    var question5clicks = 0
+                    var question6clicks = 0
+                    var question7clicks = 0 
+                    var question8clicks = 0
+                    
                     actions = data.actions
                     //console.log(actions)
                     actions.forEach(function(click){
@@ -83,11 +85,82 @@ var router = function () {
                                     "question8": question8clicks,
                                     "framework": data.frameworkEnabled}
                 })
-              
+                db.close();
               res.jsonp(clickdata);
-              db.close();
+              
             });
           });
+    });
+    adminRouter.route('/GetTTest/:id')
+    .get(function(req, res){
+        
+        
+        fakeArrayTrue = [2,3, 4, 2, 2, 2, 2, 2, 2, 2, 2, 2]
+        fakeArrayFalse = [2, 2, 2, 2, 4, 3, 4, 4, 4, 4, 4, 4]
+        
+        mongodb.connect(frameworkurl, function(err, db) {
+            if (err) throw err;
+            
+            db.collection("submissions").find({}).toArray(function(err, result) {
+              if (err) throw err;
+              //req.params.id
+              var frameworkArray = []
+              var nonFrameworkArray = []
+              //console.log(result)
+                result.forEach(function(data,i){
+                    var questionclicks = 0
+                    actions = data.actions
+                    actions.forEach(function(click){
+                        //console.log("click taskid" + click.taskId)
+                        //console.log("id param" + req.params.id)
+                        //console.log(click.taskId == req.params.id)
+                        if(click.taskId == req.params.id){
+                            questionclicks += 1;
+                        }
+                        //console.log(questionclicks)
+                    })
+                    console.log(i, questionclicks)
+                    if(data.frameworkEnabled == "true"){
+                        frameworkArray.push(questionclicks)
+                        
+                    }else{
+                        nonFrameworkArray.push(questionclicks)
+                    }
+                })
+                //console.log(typeof(frameworkArray), typeof(nonFrameworkArray))
+                //console.log(frameworkArray, nonFrameworkArray)
+                //stat = ttest(fakeArrayTrue, fakeArrayFalse)
+                options ={
+                    "varEqual": true
+                }
+                
+                //const stat = ttest(fakeArrayTrue, fakeArrayFalse, options)
+                try {
+                    const stat = ttest(frameworkArray, nonFrameworkArray, options)
+                    //console.log(stat)
+                    values = {
+                        "Statistic Value": stat.testValue(),
+                        "P Value": stat.pValue(),
+                        "Confidence": stat.confidence(),
+                        "Valid": stat.valid(),
+                        "Freedom": stat.freedom()
+                    }
+                }
+                catch (e){
+                    values = {
+                        "Statistic Value": null,
+                        "P Value": null,
+                        "Confidence": null,
+                        "Valid": null,
+                        "Freedom": null
+                    }
+                }
+                console.log(values)
+                db.close()
+                res.jsonp(values)
+            })
+        })   
+        
     });
     
     
