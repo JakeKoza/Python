@@ -1,7 +1,30 @@
+var url = ""
+if(window.location.href.split("//")[0] === "file:"){
+    url = "http://localhost:5000"
+}else{
+    url = "http://api.jacobkoza.com:8080"
+}
+function generateCSV(){
+    $.ajax({
+        //TODO: Change the URL to Post to My Endpoint
+        //url: "http://73.224.158.224:500/Submit/CheckUser",
+        url: url + "/Admin/CreateCSV",
+        method: 'GET',
+        success: function (data) {
+            //console.log(Object.keys(data).length)
+            console.log(data)
+        },
+        error: function (){
+            alert('There was an error');
+        }
+    });
+}
+//var url = "http://api.jacobkoza.com:8080/Admin/GetAllData"
 $.ajax({
     //TODO: Change the URL to Post to My Endpoint
     //url: "http://73.224.158.224:500/Submit/CheckUser",
-    url: "http://localhost:5000/Admin/GetAllData",
+    //url: "http://localhost:5000/Admin/GetAllData",
+    url: url + "/Admin/GetAllData",
     method: 'GET',
     success: function (data) {
         //console.log(Object.keys(data).length)
@@ -30,11 +53,11 @@ $.ajax({
     }
 });
 
-
+//var urlT = "http://api.jacobkoza.com:8080/Admin/GetTTest/" 
 $.ajax({
         //TODO: Change the URL to Post to My Endpoint
         //url: "http://73.224.158.224:500/Submit/CheckUser",
-        url: "http://localhost:5000/Admin/GetTTest/1",
+        url: url + "/Admin/GetTTest/1",
         method: 'GET',
         success: function (data) {
             //console.log(Object.keys(data).length)
@@ -58,7 +81,7 @@ $.ajax({
 $.ajax({
     //TODO: Change the URL to Post to My Endpoint
     //url: "http://73.224.158.224:500/Submit/CheckUser",
-    url: "http://localhost:5000/Admin/GetTTest/2",
+    url: url + "/Admin/GetTTest/2",
     method: 'GET',
     success: function (data) {
         console.log(data["Statistic Value"])
@@ -82,7 +105,7 @@ $.ajax({
 $.ajax({
     //TODO: Change the URL to Post to My Endpoint
     //url: "http://73.224.158.224:500/Submit/CheckUser",
-    url: "http://localhost:5000/Admin/GetTTest/3",
+    url: url + "/Admin/GetTTest/3",
     method: 'GET',
     success: function (data) {
         console.log(data["Statistic Value"])
@@ -106,7 +129,7 @@ $.ajax({
 $.ajax({
     //TODO: Change the URL to Post to My Endpoint
     //url: "http://73.224.158.224:500/Submit/CheckUser",
-    url: "http://localhost:5000/Admin/GetTTest/4",
+    url: url + "/Admin/GetTTest/4",
     method: 'GET',
     success: function (data) {
         console.log(data["Statistic Value"])
@@ -130,7 +153,7 @@ $.ajax({
 $.ajax({
     //TODO: Change the URL to Post to My Endpoint
     //url: "http://73.224.158.224:500/Submit/CheckUser",
-    url: "http://localhost:5000/Admin/GetTTest/5",
+    url: url + "/Admin/GetTTest/5",
     method: 'GET',
     success: function (data) {
         console.log(data["Statistic Value"])
@@ -154,7 +177,7 @@ $.ajax({
 $.ajax({
     //TODO: Change the URL to Post to My Endpoint
     //url: "http://73.224.158.224:500/Submit/CheckUser",
-    url: "http://localhost:5000/Admin/GetTTest/6",
+    url: url + "/Admin/GetTTest/6",
     method: 'GET',
     success: function (data) {
         console.log(data["Statistic Value"])
@@ -178,7 +201,7 @@ $.ajax({
 $.ajax({
     //TODO: Change the URL to Post to My Endpoint
     //url: "http://73.224.158.224:500/Submit/CheckUser",
-    url: "http://localhost:5000/Admin/GetTTest/7",
+    url: url + "/Admin/GetTTest/7",
     method: 'GET',
     success: function (data) {
         console.log(data["Statistic Value"])
@@ -202,7 +225,7 @@ $.ajax({
 $.ajax({
     //TODO: Change the URL to Post to My Endpoint
     //url: "http://73.224.158.224:500/Submit/CheckUser",
-    url: "http://localhost:5000/Admin/GetTTest/8",
+    url: url + '/Admin/GetTTest/8',
     method: 'GET',
     success: function (data) {
         console.log(data["Statistic Value"])
@@ -221,5 +244,151 @@ $.ajax({
     },
     error: function (){
         alert('There was an error please contact n00431448@ospreys.unf.edu');
+    }
+});
+
+$.ajax({
+    //TODO: Change the URL to Post to My Endpoint
+    //url: "http://73.224.158.224:500/Submit/CheckUser",
+    url: url + "/Admin/GetPie/1",
+    method: 'GET',
+    success: function (data) {
+        console.log("hello")
+        console.log(Object.values(data))
+        console.log(Object.keys(data))
+        var stats = [{
+            values: Object.values(data),
+            labels: Object.keys(data),
+            type: 'pie'}]
+        var layout = {
+                height: 300,
+                width: 400
+              };
+              
+        Plotly.newPlot('age', stats, layout);
+    },
+    error: function (){
+        alert('There was an error');
+    }
+});
+
+$.ajax({
+    //TODO: Change the URL to Post to My Endpoint
+    //url: "http://73.224.158.224:500/Submit/CheckUser",
+    url: url + "/Admin/GetPie/2",
+    method: 'GET',
+    success: function (data) {
+        console.log("hello")
+        console.log(Object.values(data))
+        console.log(Object.keys(data))
+        var stats = [{
+            values: Object.values(data),
+            labels: Object.keys(data),
+            type: 'pie'}]
+        var layout = {
+                height: 300,
+                width: 400
+              };
+              
+        Plotly.newPlot('class', stats, layout);
+    },
+    error: function (){
+        alert('There was an error');
+    }
+});
+$.ajax({
+    //TODO: Change the URL to Post to My Endpoint
+    //url: "http://73.224.158.224:500/Submit/CheckUser",
+    url: url + "/Admin/GetPie/3",
+    method: 'GET',
+    success: function (data) {
+        console.log("hello")
+        console.log(Object.values(data))
+        console.log(Object.keys(data))
+        var stats = [{
+            values: Object.values(data),
+            labels: Object.keys(data),
+            type: 'pie'}]
+        var layout = {
+                height: 300,
+                width: 400
+              };
+              
+        Plotly.newPlot('experience', stats, layout);
+    },
+    error: function (){
+        alert('There was an error');
+    }
+});
+$.ajax({
+    //TODO: Change the URL to Post to My Endpoint
+    //url: "http://73.224.158.224:500/Submit/CheckUser",
+    url: url + "/Admin/GetPie/4",
+    method: 'GET',
+    success: function (data) {
+        console.log("hello")
+        console.log(Object.values(data))
+        console.log(Object.keys(data))
+        var stats = [{
+            values: Object.values(data),
+            labels: Object.keys(data),
+            type: 'pie'}]
+        var layout = {
+                height: 300,
+                width: 400
+              };
+              
+        Plotly.newPlot('browser', stats, layout);
+    },
+    error: function (){
+        alert('There was an error');
+    }
+});
+$.ajax({
+    //TODO: Change the URL to Post to My Endpoint
+    //url: "http://73.224.158.224:500/Submit/CheckUser",
+    url: url + "/Admin/GetPie/5",
+    method: 'GET',
+    success: function (data) {
+        console.log("hello")
+        console.log(Object.values(data))
+        console.log(Object.keys(data))
+        var stats = [{
+            values: Object.values(data),
+            labels: Object.keys(data),
+            type: 'pie'}]
+        var layout = {
+                height: 300,
+                width: 400
+              };
+              
+        Plotly.newPlot('language', stats, layout);
+    },
+    error: function (){
+        alert('There was an error');
+    }
+});
+$.ajax({
+    //TODO: Change the URL to Post to My Endpoint
+    //url: "http://73.224.158.224:500/Submit/CheckUser",
+    url: url + "/Admin/GetPie/6",
+    method: 'GET',
+    success: function (data) {
+        console.log("hello")
+        console.log(Object.values(data))
+        console.log(Object.keys(data))
+        var stats = [{
+            values: Object.values(data),
+            labels: Object.keys(data),
+            type: 'pie'}]
+        var layout = {
+                height: 300,
+                width: 400
+              };
+              
+        Plotly.newPlot('visit', stats, layout);
+    },
+    error: function (){
+        alert('There was an error');
     }
 });

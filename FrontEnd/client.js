@@ -380,12 +380,22 @@ function TaskService() {
         },
         {
             id: 19,
-            question: "Exploring the site was frustrating",
+            question: "I would like to use this system frequently",
             answers: "rate"
         },
         {
             id: 20,
-            question: "It took too many clicks to find what I was looking for",
+            question: "I found th system uncessarily complex",
+            answers: "rate"
+        },
+        {
+            id: 21,
+            question: "I believe this site would be easy to learn to navigate",
+            answers: "rate"
+        },
+        {
+            id: 22,
+            question: "I felt confident about my decisions in my navigation choices",
             answers: "rate"
         }
     ];
@@ -587,7 +597,7 @@ function TaskService() {
     };
     this.consent = function() {
         var self = this;
-        var html = "<h2><span class='title'>Active Analytics Testing</span></h2><p>Thank you for participating in our study, we will ask you to complete some simple navigation tasks. We will display task scenario, the name of a page, and we ask that you navigate to this page using links on the page.  It may take several clicks before you reach the destination page. We have enabled search suggestions for the search box on each page (which you can use to navigate) but have disabled the search results page because we are trying to improve navigation not search results with our study.</p><p>Please review the following study consent document by clicking “Begin” below you acknowledge that you have given consent to be a subject of this research and you are at least 18 years of age. If you do not want to participate in this study you may close this browser window.</p><p><a target='_blank' href='" + window._AAHost + "/img/consent.pdf'>Consent Form (opens in a new tab/window)</a></p><br/><button type='button' id='btnBegin' class='btn btn-success'>Yes, I Want to Participate (Begin)</button>";
+        var html = "<h2><span class='title'>Active Analytics Testing</span></h2><p>Thank you for participating in our study, we will ask you to complete some simple navigation tasks. We will display task scenario, the name of a page, and we ask that you navigate to this page using links on the page.  It may take several clicks before you reach the destination page. We have enabled search suggestions for the search box on each page (which you can use to navigate) but have disabled the search results page because we are trying to improve navigation not search results with our study.</p><p>Please review the following study consent document by clicking “Begin” below you acknowledge that you have given consent to be a subject of this research and you are at least 18 years of age. If you do not want to participate in this study you may close this browser window.</p><p><a target='_blank' href='/predictiveAnalytics/consent.pdf'>Consent Form (opens in a new tab/window)</a></p><br/><button type='button' id='btnBegin' class='btn btn-success'>Yes, I Want to Participate (Begin)</button>";
         $modal = createModal(html);
         $modal.find("#btnBegin").click(function(){
             self.nameForm();
@@ -627,7 +637,7 @@ function TaskService() {
                         }
                     },
                     error: function (){
-                        alert('There was an error please contact n00431448@ospreys.unf.edu');
+                        alert('There was an error please contact jake.koza@unf.edu');
                     }
                 });
             }

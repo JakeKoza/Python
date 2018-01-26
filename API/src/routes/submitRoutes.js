@@ -55,7 +55,7 @@ var router = function () {
               if (err) throw err;
               console.log(result)
             
-              db.collection("users").insertOne(user, function(err, result){
+              db.collection("users").insertOne(JSON.parse(user), function(err, result){
                 if (err) throw err;
                 res.jsonp("user submitted")
               });

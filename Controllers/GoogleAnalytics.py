@@ -58,8 +58,8 @@ def get_report(analytics):
         {
           'viewId': VIEW_ID,
           'dateRanges': [
-			{'startDate': '2016-01-01', 
-			'endDate': '2016-12-31'}
+			{'startDate': '2017-01-01', 
+			'endDate': '2017-12-31'}
 			],
           'metrics': [
 			{'expression': 'ga:pageviews'}
@@ -128,7 +128,7 @@ def print_query(response, week):
 
 def add_to_dict(response):
 	client = MongoClient("mongodb://localhost:27017")
-	db = client.Thesis
+	db = client.Thesis2017
 	for report in response.get('reports', []):
 		columnHeader = report.get('columnHeader', {})
 		dimensionHeaders = columnHeader.get('dimensions', [])
@@ -151,6 +151,10 @@ def main():
 
   analytics = initialize_analyticsreporting()
   response = get_report(analytics)
+  #myfile = open("test.json", "a")
+  #myfile.write(repr(response))
+  #myfile.close()
+  #print(response)
   #print_response(response)
   add_to_dict(response)
   #print_query(response, 35)
