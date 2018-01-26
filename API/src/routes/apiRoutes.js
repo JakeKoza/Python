@@ -1,7 +1,6 @@
 var express = require("express");
 var mongodb = require('mongodb').MongoClient;
 var ObjectId = require('mongodb').ObjectID;
-var sortjsonarray = require('sort-json-array');
 var apiRouter = express.Router();
 var frameworkurl = "mongodb://localhost:27017/Thesis";
 var preurl = "mongodb://localhost:27017/PreQuestionResponses";
@@ -101,11 +100,12 @@ var router = function () {
                             datastripped.push(item.url)
                         })
                         datastripped.forEach(function(urls, i){
-                        if(urls.match(/\/default.*/) || urls == "/library/default.aspx" || urls == "/N/A" || urls.match(/\/mobile*/)){
+                        if(urls.match(/\/default.*/) || urls.match(/\/library*/) || urls == "/N/A" || urls.match(/\/mobile*/)){
                                     
                         }else{
                             //console.log(selectdata.indexOf(item))
-                            
+                            urls = urls.replace(/aspx/, "html").slice(1)
+                            urls = urls.slice(0, urls.indexOf("/"))
                            if(selectdata.indexOf(urls) == -1){
                                //console.log(item.url + " > -1")
                                 selectdata.push(urls)
