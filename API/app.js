@@ -7,8 +7,8 @@ var fs = require('fs');
 var https = require('https')
 
 var options = {
-  key: fs.readFileSync('../../kozathesis.key'),
-  cert: fs.readFileSync('../../kozathesis.crt')
+ // key: fs.readFileSync('../../kozathesis.key'),
+ // cert: fs.readFileSync('../../kozathesis.crt')
 };
 
 var app = express();

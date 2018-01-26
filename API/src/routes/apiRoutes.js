@@ -1,10 +1,20 @@
 var express = require("express");
 var mongodb = require('mongodb').MongoClient;
 var ObjectId = require('mongodb').ObjectID;
+var sortjsonarray = require('sort-json-array');
 var apiRouter = express.Router();
 var frameworkurl = "mongodb://localhost:27017/Thesis";
 var preurl = "mongodb://localhost:27017/PreQuestionResponses";
 var posturl = "mongodb://localhost:27017/PostQuestionResponses";
+var sortByProperty = function (property) {
+
+    return function (x, y) {
+
+        return ((x[property] === y[property]) ? 0 : ((x[property] > y[property]) ? -1 : 1));
+
+    };
+
+};
 var router = function () {
     apiRouter.use(
         function (req, res, next) {
@@ -49,6 +59,69 @@ var router = function () {
               res.jsonp(result);
               db.close();
             });
+          });
+    });
+    apiRouter.route('/GetSlidingWindow/:midweek')
+    .get(function(req, res){
+        var midweek = parseInt(req.params.midweek)
+        var nextweek = midweek + 1
+        var lastweek = midweek - 1
+        if(midweek < 10){
+            midweek = "0"+ String(midweek)
+        }else{
+            midweek = "0"+ String(midweek)
+        }
+        if(nextweek < 10){
+            nextweek = "0"+ String(nextweek)
+        }else{
+            nextweek = "0"+ String(nextweek)
+        }
+        if(lastweek < 10){
+            lastweek = "0"+ String(lastweek)
+        }else{
+            lastweek = "0"+ String(lastweek)
+        }
+        data = []
+        var datastripped = []
+        var selectdata = []
+        //res.jsonp({"this week": midweek, "next week": nextweek, "last week": lastweek})
+        mongodb.connect(frameworkurl, function(err, db) {
+            if (err) throw err;
+            db.collection(midweek).find({}).toArray(function(err, result) {
+                if (err) throw err;
+                result.forEach(function(items){data.push({"url": items.url, "pageviews": items.pageviews})})
+                db.collection(nextweek).find({}).toArray(function(err, result2){
+                    if(err) throw err;
+                    result2.forEach(function(items){data.push({"url": items.url, "pageviews": items.pageviews})})
+                    db.collection(lastweek).find({}).toArray(function(err, result3){
+                        if(err) throw err;
+                        result3.forEach(function(items){data.push({"url": items.url, "pageviews": items.pageviews})})
+                        data = data.sort(sortByProperty("pageviews"))
+                        data.forEach(function(item, i){
+                            datastripped.push(item.url)
+                        })
+                        datastripped.forEach(function(urls, i){
+                        if(urls.match(/\/default.*/) || urls == "/library/default.aspx" || urls == "/N/A" || urls.match(/\/mobile*/)){
+                                    
+                        }else{
+                            //console.log(selectdata.indexOf(item))
+                            
+                           if(selectdata.indexOf(urls) == -1){
+                               //console.log(item.url + " > -1")
+                                selectdata.push(urls)
+                           }else{
+                                //console.log(item.url + " !> -1")
+                           }
+                        }
+                        })
+                        db.close();
+                        res.jsonp(selectdata);
+                    })
+                })
+            });
+           
+            
+              
           });
     });
     apiRouter.route('/PreQuestions')
